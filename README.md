@@ -1,50 +1,47 @@
-# React + TypeScript + Vite
+# Tech Challenge - fase 03
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Requisitos funcionais
+A interface gráfica deve incluir as seguintes páginas e funcionalidades:
+1. Página principal (Lista de posts)
+o Exibir uma lista de todos os posts disponíveis.
+o Cada item da lista deve mostrar o título, autor e uma breve
+descrição do post.
+o Incluir um campo de busca para filtrar posts por palavras-chave.
+2. Página de leitura de post
+o Exibir o conteúdo completo de um post selecionado.
+o Permitir comentários nos posts (opcional).
+3. Página de criação de postagens
+o Formulário para que docentes possam criar postagens.
+o Campos para título, conteúdo e autor.
+o Botão para enviar o post ao servidor.
+4. Página de edição de postagens
+o Formulário para que os(as) professores(as) possam editar
+postagens existentes.
+o Carregar os dados atuais do post para edição.
+o Botão para salvar as alterações.
+5. Página administrativa
+o Exibir uma lista de todas as postagens, com opções para editar e
+excluir cada post.
+o Botões para editar e excluir postagens específicas.
+6. Autenticação e autorização
+o Implementar login para professores.
+o Garantir que apenas usuários autenticados possam acessar as
+páginas de criação, edição e administração de postagens.
 
-Currently, two official plugins are available:
+## Requisitos técnicos
+1. Desenvolvimento em React
+o Utilizar React para desenvolver a interface gráfica.
+o Utilização de hooks e componentes funcionais.
+2. Estilização e responsividade
+o Utilizar Styled Components ou outro método de estilização.
+o Garantir que a aplicação seja responsiva, funcionando bem em
+dispositivos móveis e desktops.
+3. Integração com Back-End
+o Realizar chamadas aos endpoints REST para obter, criar, editar e
+excluir posts.
+o Gerenciar o estado da aplicação com ferramentas como Context
+API ou Redux (opcional).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## Como executar o projeto
+1. `npm i`
+2. `npm run dev`

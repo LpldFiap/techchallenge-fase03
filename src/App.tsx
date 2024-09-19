@@ -1,13 +1,21 @@
-import './App.css'
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
+import { Home } from "./pages/Home"
+import { Login } from "./pages/Login"
+import { Header } from "./components/Header"
+import { NewPost } from "./pages/NewPost"
 
 function App() {
 
   return (
-    <>
-      <h1 className="text-4xl text-blue-700 font-bold">
-        Hello React!
-      </h1>
-    </>
+    <Router>
+      <Header />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/new" element={<NewPost />} />
+      </Routes>
+    </Router>
   )
 }
 
