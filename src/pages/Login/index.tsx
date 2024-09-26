@@ -2,6 +2,7 @@ import { useState } from 'react';
 import 'tailwindcss/tailwind.css';
 import { saveUser } from '../../utils/auth';
 import { useNavigate } from 'react-router-dom';
+import { newUser } from '../../services/newUser';
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -28,8 +29,14 @@ export function Login() {
       alert('As senhas não coincidem');
       return;
     }
-    // Lógica para registrar o usuário
-    console.log('Register:', { name, registerEmail, registerPassword });
+
+    newUser({
+      email: registerEmail,
+      name: name,
+      password: registerPassword,
+      roles: ["teacher"]
+    })
+
     setIsModalOpen(false);
   };
 
