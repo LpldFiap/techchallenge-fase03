@@ -5,3 +5,8 @@ export interface User {
   password: string
   roles: Array<"admin" | "teacher">
 }
+
+export type AuthContextType = {
+  authenticatedUser: User | null
+  authenticateUser: ({ email:string, password: string}) => Promise<User | null>
+}

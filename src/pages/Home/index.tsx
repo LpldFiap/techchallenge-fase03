@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'tailwindcss/tailwind.css';
+import { AuthContext } from '../../context/auth';
+import { AuthContextType } from '../../types/user';
 
 type UserRole = 'teacher' | 'student';
 
@@ -19,6 +21,9 @@ const mockPosts: Post[] = [
 export function Home() {
   const [role, setRole] = useState<UserRole>('teacher');
   const [posts, setPosts] = useState<Post[]>(mockPosts);
+  const { authenticatedUser } = useContext(
+    AuthContext,
+  ) as AuthContextType
   const navigate = useNavigate();
 
   const handlePostClick = (id: number) => {
@@ -28,6 +33,9 @@ export function Home() {
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <nav className="p-4 mb-4">
+        <strong className="text-4xl">Bom te ver {authenticatedUser?.name}!</strong>
+        <div className="h-[1px] block w-full bg-slate-200 my-7" />
+
         <h1 className="text-xl font-bold">Publicações</h1>
         <div className="relative mt-6 w-full">
           <img

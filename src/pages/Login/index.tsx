@@ -1,32 +1,36 @@
-import { useState } from 'react';
-import 'tailwindcss/tailwind.css';
-import { saveUser } from '../../utils/auth';
-import { useNavigate } from 'react-router-dom';
-import { newUser } from '../../services/newUser';
+import { useContext, useState } from "react";
+import "tailwindcss/tailwind.css";
+import { useNavigate } from "react-router-dom";
+import { newUser } from "../../services/newUser";
+import { AuthContext } from "../../context/auth";
+import { AuthContextType } from "../../types/user";
 
 export function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [name, setName] = useState('');
-  const [registerEmail, setRegisterEmail] = useState('');
-  const [registerPassword, setRegisterPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState("");
+  const [registerEmail, setRegisterEmail] = useState("");
+  const [registerPassword, setRegisterPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { authenticateUser } = useContext(
+    AuthContext,
+  ) as AuthContextType;
 
   const navigate = useNavigate();
 
   const handleLoginSubmit = (e: React.FormEvent) => {
-       e.preventDefault();
-    // Simulação de autenticação
-    const mockUser = { name: 'John Doe', email, role: 'student' }; // Exemplo de usuário autenticado
-    saveUser(mockUser.name, mockUser.email, mockUser.role);
-    navigate('/');
+    e.preventDefault();
+
+    authenticateUser({ email,password }).then(isUserAuthenticated => {
+      isUserAuthenticated ? navigate("/") : console.log("Credenciais incorretas")
+    })
   };
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (registerPassword !== confirmPassword) {
-      alert('As senhas não coincidem');
+      alert("As senhas não coincidem");
       return;
     }
 
@@ -34,47 +38,66 @@ export function Login() {
       email: registerEmail,
       name: name,
       password: registerPassword,
-      roles: ["teacher"]
-    })
+      roles: ["teacher"],
+    });
 
     setIsModalOpen(false);
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
-      <div className="bg-white shadow-md p-6 rounded w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-4">Login</h1>
-        <form onSubmit={handleLoginSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Senha</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded"
-              required
-            />
-          </div>
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-            Entrar
+    <div className="min-h-screen bg-gradient-to-tr from-[#45B649] to-[#DCE35B] p-4 flex items-center justify-center">
+      <div className="flex flex-col md:flex-row gap-16 items-center">
+        <div className="flex flex-col gap-1 xl:gap-2">
+          <h1 className="font-bold text-white text-3xl xl:text-5xl">
+            Bem vindo de volta!
+          </h1>
+          <h2 className="text-white/60 text-lg xl:text-2xl max-w-80">
+            Preparado para escrever algo incrível?
+          </h2>
+        </div>
+
+        <div className="flex flex-col gap-4 bg-white shadow-md p-6 py-8 rounded-xl">
+          <strong className="font-medium">
+            Entre com seus dados
+          </strong>
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={handleLoginSubmit}
+          >
+            <div className="flex flex-col gap-1 px-2">
+              <label className="text-sm text-[#7C7C7C]">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="px-3 py-2 border rounded-lg"
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-1 px-2">
+              <label className="text-sm text-[#7C7C7C]">Senha</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-3 py-2 border rounded"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="bg-[#274F32] text-white py-2 rounded-full text-sm font-medium hover:bg-[#1F492A] transition"
+            >
+              Entrar
+            </button>
+          </form>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-white border border-[#274F32] text-[#274F32] py-2 rounded-full text-sm font-medium hover:border-[#1F492A] hover:text-[#1F492A] transition"
+          >
+            Cadastrar
           </button>
-        </form>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="mt-4 bg-green-500 text-white px-4 py-2 rounded"
-        >
-          Cadastrar
-        </button>
+        </div>
       </div>
 
       {isModalOpen && (
@@ -122,7 +145,10 @@ export function Login() {
                   required
                 />
               </div>
-              <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
                 Registrar
               </button>
               <button
