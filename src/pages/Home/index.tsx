@@ -26,8 +26,8 @@ export function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <nav className="bg-white shadow-md p-4 mb-4 flex justify-between">
+    <div className="min-h-screen p-4 md:max-w-2xl xl:max-w-5xl mx-auto">
+      <div className="bg-white shadow-md p-4 mb-4 flex justify-between">
         <h1 className="text-xl font-bold">Portal Tech Challenge</h1>
         <div>
           {role === 'teacher' && (
@@ -35,7 +35,7 @@ export function Home() {
           )}
           <button className="bg-green-500 text-white px-4 py-2 rounded">Visualizar Posts</button>
         </div>
-      </nav>
+      </div>
       <div className="bg-white shadow-md p-4 rounded">
         <h2 className="text-2xl font-bold mb-4">Posts</h2>
         {posts.map(post => (
