@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import 'tailwindcss/tailwind.css';
 import { TPost } from '../../types/posts';
-import { getPostById } from '../../services/post.services';
-import { getUserRole } from '../../services/user.service';
+import { deletePost } from '../../services/post.services';
+import { getUserId, getUserRole } from '../../services/user.service';
 import { TUserRole } from '../../types/user';
+import { usePosts } from '../../context/Posts/PostsContext';
 
 export default function PostDetail() {
   const { id } = useParams<{ id: string }>();
@@ -13,12 +14,14 @@ export default function PostDetail() {
   const [role, setRole] = useState<TUserRole | null>(null);
   const navigate = useNavigate();
 
+  const { fetchPostById } = usePosts();
+
   const fetchPost = async (id?: string) => {
     setLoading(true);
     if (id) {
       try {
-        const response = await getPostById(id);
-        setPost(response);
+        const post = await fetchPostById(id);
+        setPost(post);
       } catch (error) {
         console.error('Erro ao buscar o post:', error);
       } finally {
@@ -33,25 +36,26 @@ export default function PostDetail() {
       setRole(userRole);
     }
   }, [role])
+
   useEffect(() => {
     fetchPost(id);
   }, [id]);
 
   const handleEdit = () => {
-    // Lógica para editar o post
-    console.log('Editar post:', id);
     navigate(`/new/${id}`);
   };
 
   const handleDelete = async () => {
-    // Lógica para deletar o post
     try {
-      await fetch(`/api/posts/${id}`, {
-        method: 'DELETE',
-      });
-      navigate('/');
+      if (!id) return
+      setLoading(true);
+      const user_id = getUserId();
+      await deletePost({id, user_id});
     } catch (error) {
       console.error('Erro ao deletar o post:', error);
+    } finally {
+      setLoading(false);
+      navigate('/');
     }
   };
 
@@ -62,15 +66,13 @@ export default function PostDetail() {
   if (!post) {
     return <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">Post não encontrado</div>;
   }
-
   return (
     <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
       <div className="bg-white shadow-md p-6 rounded w-full max-w-2xl">
         <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
         <p className="text-gray-700 mb-4">{post.description}</p>
         <p className="text-gray-500 mb-2">Autor: {post.author}</p>
-        <p className="text-gray-500 mb-2">Data de Criação: {new Date(post.createdAt || '').toLocaleDateString()}</p>
-        <p className="text-gray-500">Última Modificação: {new Date(post.updatedAt || '').toLocaleDateString()}</p>
+        <p className="text-gray-500 mb-2">Data de Criação: {post.created_at ? new Date(post.created_at).toISOString() : ''}</p>
         {role === 'teacher' && (
           <div className="mt-4 flex justify-end">
             <button

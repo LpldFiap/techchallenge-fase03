@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { getAllPosts } from '../../services/post.services';
+import { getAllPosts, getPostById } from '../../services/post.services';
 import { TPost } from '../../types/posts';
 import { PostsContextType } from './PostsContext.types';
 
@@ -22,12 +22,25 @@ export const PostsProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  const fetchPostById = useCallback(async (id: string) => {
+    setLoading(true);
+    try {
+      const post = await getPostById(id);
+      return post;
+    } catch (error) {
+      console.error(`Erro ao buscar o post com id ${id}:`, error);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]);
 
   return (
-    <PostsContext.Provider value={{ posts, loading, fetchPosts }}>
+    <PostsContext.Provider value={{ posts, loading, fetchPosts, fetchPostById }}>
       {children}
     </PostsContext.Provider>
   );
