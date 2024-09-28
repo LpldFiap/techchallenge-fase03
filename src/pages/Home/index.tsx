@@ -17,7 +17,7 @@ const mockPosts: Post[] = [
 ];
 
 export function Home() {
-  const [role, setRole] = useState<UserRole>('student');
+  const [role, setRole] = useState<UserRole>('teacher');
   const [posts, setPosts] = useState<Post[]>(mockPosts);
   const navigate = useNavigate();
 
@@ -27,24 +27,34 @@ export function Home() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
-      <nav className="bg-white shadow-md p-4 mb-4 flex justify-between">
-        <h1 className="text-xl font-bold">Portal Tech Challenge</h1>
-        <div>
-          {role === 'teacher' && (
-            <button className="bg-blue-500 text-white px-4 py-2 rounded mr-2">Criar Post</button>
-          )}
-          <button className="bg-green-500 text-white px-4 py-2 rounded">Visualizar Posts</button>
+      <nav className="p-4 mb-4">
+        <h1 className="text-xl font-bold">Publicações</h1>
+        <div className="relative mt-6 w-full">
+          <img
+            src="/assets/icons/search.svg"
+            alt="Search Icon"
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5"
+          />
+          <input
+            className="rounded-md p-2 pl-10 w-full"
+            placeholder="Buscar publicação"
+          />
         </div>
+          {role === 'teacher' && (
+            <button className="bg-blue-500 text-white px-4 py-2 rounded-md w-full mt-6 flex items-center">
+              Nova publicação
+              <img src="/assets/icons/plus.svg" alt="Plus Icon" className="ml-2 w-4 h-4" />
+            </button>
+          )}
       </nav>
-      <div className="bg-white shadow-md p-4 rounded">
-        <h2 className="text-2xl font-bold mb-4">Posts</h2>
+      <div>
         {posts.map(post => (
           <div
             key={post.id}
-            className="mb-4 p-4 border-b border-gray-200 cursor-pointer"
+            className="bg-white shadow-md mb-4 p-4 border-b border-gray-200 cursor-pointer rounded-md"
             onClick={() => handlePostClick(post.id)}
           >
-            <h3 className="text-xl font-semibold">{post.title}</h3>
+            <h3 className="text-xl font-semibold mb-4">{post.title}</h3>
             <p className="text-gray-700">{post.content}</p>
             <p className="text-gray-500 text-sm">Autor: {post.author}</p>
           </div>
