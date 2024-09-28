@@ -8,7 +8,7 @@ import { useMutation } from 'react-query';
 import deletePost from '../../services/deletePost';
 
 interface Post {
-  id: number;
+  _id: number;
   title: string;
   content: string;
   author: string;
@@ -65,9 +65,9 @@ export default function Home() {
       <div>
         {posts.map(post => (
           <div
-            key={post.id}
+            key={post._id}
             className="bg-white shadow-md mb-4 p-4 border-b border-gray-200 cursor-pointer rounded-md"
-            onClick={() => handlePostClick(post.id)}
+            onClick={() => handlePostClick({id: post._id})}
           >
             <div className="flex">
               <h3 className="text-xl font-semibold mb-4">{post.title}</h3>

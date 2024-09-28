@@ -1,48 +1,40 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import 'tailwindcss/tailwind.css';
-
-interface Post {
-  title: string;
-  description: string;
-  author: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { TPost } from '../../types/posts';
+import { getPostById } from '../../services/post.services';
+import { getUserRole } from '../../services/user.service';
+import { TUserRole } from '../../types/user';
 
 export default function PostDetail() {
   const { id } = useParams<{ id: string }>();
-  const [post, setPost] = useState<Post | null>(null);
+  const [post, setPost] = useState<TPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const [role, setRole] = useState<string>('teacher'); // Simulação de autenticação
+  const [role, setRole] = useState<TUserRole | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchPost = async () => {
+  const fetchPost = async (id?: string) => {
+    if (id) {
       try {
-        const response = await fetch(`/api/posts/${id}`);
-        const data = await response.json();
-        setPost(data);
+        const response = await getPostById(id);
+        
+        setPost(response);
       } catch (error) {
         console.error('Erro ao buscar o post:', error);
       } finally {
         setLoading(false);
       }
-    };
-
-    //mock post id 1 ou 2
-    if (id === '1' || id === '2') {
-      setPost({
-        title: 'Welcome',
-        description: 'Welcome to the school portal!',
-        author: 'Teacher A',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
-      setLoading(false);
-    } else {
-      fetchPost();
     }
+  };
+
+  useEffect(() => {
+    const userRole = getUserRole();
+    if (userRole) {
+      setRole(userRole);
+    }
+  }, [role])
+  useEffect(() => {
+    fetchPost(id);
   }, [id]);
 
   const handleEdit = () => {
@@ -77,8 +69,8 @@ export default function PostDetail() {
         <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
         <p className="text-gray-700 mb-4">{post.description}</p>
         <p className="text-gray-500 mb-2">Autor: {post.author}</p>
-        <p className="text-gray-500 mb-2">Data de Criação: {new Date(post.createdAt).toLocaleDateString()}</p>
-        <p className="text-gray-500">Última Modificação: {new Date(post.updatedAt).toLocaleDateString()}</p>
+        <p className="text-gray-500 mb-2">Data de Criação: {new Date(post.createdAt || '').toLocaleDateString()}</p>
+        <p className="text-gray-500">Última Modificação: {new Date(post.updatedAt || '').toLocaleDateString()}</p>
         {role === 'teacher' && (
           <div className="mt-4 flex justify-end">
             <button

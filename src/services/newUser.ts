@@ -2,7 +2,7 @@ import axios from "axios"
 import { User } from "../types/user"
 import api from "../api"
 
-async function newUser({ email, name, password, roles = [] }: User) {
+export const newUser = async ({ email, name, password, roles = [] }: User) => {
   if (!email || !name || !password) {
     console.error("Email inválido")
     return undefined
@@ -18,4 +18,3 @@ async function newUser({ email, name, password, roles = [] }: User) {
   return response.data
 }
 
-export { newUser }
