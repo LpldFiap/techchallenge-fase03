@@ -14,10 +14,10 @@ export default function PostDetail() {
   const navigate = useNavigate();
 
   const fetchPost = async (id?: string) => {
+    setLoading(true);
     if (id) {
       try {
         const response = await getPostById(id);
-        
         setPost(response);
       } catch (error) {
         console.error('Erro ao buscar o post:', error);

@@ -73,7 +73,7 @@ export default function Home() {
               <h3 className="text-xl font-semibold mb-4">{post.title}</h3>
               {authenticatedUser?.roles?.includes('teacher') && (
                 <>
-                  <Link to={`/new/${post.id}`} className="block ml-6">
+                  <Link to={`/new/${post._id}`} className="block ml-6">
                     <button className="bg-[#274F32] h-8 text-xs text-white px-2 py-2 rounded-md items-center hover:bg-[#1F492A] transition">
                       Editar
                     </button>
@@ -82,7 +82,7 @@ export default function Home() {
                     className="bg-[#E76565] h-8 ml-2 text-xs text-white px-2 py-2 rounded-md items-center hover:bg-[#eb8181] transition"
                     onClick={() => {
                       if (window.confirm("Confirmar exclusão?")) {
-                        deleteMutation.mutate(post?.id.toString());
+                        deleteMutation.mutate(post?._id.toString());
                       }
                     }}
                   >
