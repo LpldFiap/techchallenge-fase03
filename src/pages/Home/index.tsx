@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import 'tailwindcss/tailwind.css';
 import { AuthContext } from '../../context/auth';
 import { AuthContextType } from '../../types/user';
@@ -56,6 +56,24 @@ export function Home() {
     navigate(`/post/${id}`);
   };
 
+  const deletePost = async (postId: number) => {
+    try {
+      await fetch(`/api/posts/${postId}`, {
+        method: 'DELETE',
+      });
+      
+      setPosts(prevPosts => prevPosts.filter(post => post.id !== postId));
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
+
+  const handleDeletePost = (id: number) => {
+    if (window.confirm('Deseja realmente excluir a publicação?')) {
+      deletePost(id);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <nav className="p-4 mb-4">
@@ -63,7 +81,7 @@ export function Home() {
         <div className="h-[1px] block w-full bg-slate-200 my-7" />
 
         <h1 className="text-xl font-bold">Publicações</h1>
-        <div className="relative mt-6 w-full">
+        <div className="mt-6 w-full">
           <input
             className="rounded-md px-4 py-2 w-full"
             placeholder="Buscar publicação"
@@ -72,9 +90,11 @@ export function Home() {
           />
         </div>
         {role === 'teacher' && (
-          <button className="bg-[#274F32] text-white px-4 py-2 rounded-md w-full mt-6 flex items-center hover:bg-[#1F492A] transition">
+          <Link to="/new/" className="block">
+          <button className="bg-[#274F32] text-white px-4 py-2 rounded-md w-full mt-6 hover:bg-[#1F492A] transition">
             Nova publicação
           </button>
+        </Link>
         )}
       </nav>
       <div>
@@ -84,7 +104,25 @@ export function Home() {
             className="bg-white shadow-md mb-4 p-4 border-b border-gray-200 cursor-pointer rounded-md"
             onClick={() => handlePostClick(post.id)}
           >
-            <h3 className="text-xl font-semibold mb-4">{post.title}</h3>
+            <div className='flex'>
+
+              <h3 className="text-xl font-semibold mb-4">{post.title}</h3>
+              {role === 'teacher' && (
+                <Link to={`/new/${post.id}`} className="block ml-6">
+                  <button className="bg-[#274F32] h-8 text-xs text-white px-2 py-2 rounded-md items-center hover:bg-[#1F492A] transition">
+                    Editar
+                  </button>
+                </Link>
+              )}
+              {role === 'teacher' && (
+                  <button 
+                    className="bg-[#E76565] h-8 ml-2 text-xs text-white px-2 py-2 rounded-md items-center hover:bg-[#eb8181] transition"
+                    onClick={() => handleDeletePost(post.id)}   
+                  >
+                    Remover
+                  </button>
+              )}
+            </div>
             <p className="text-gray-700">{post.content}</p>
             <p className="text-gray-500 text-sm">Autor: {post.author}</p>
           </div>
