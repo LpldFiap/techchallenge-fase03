@@ -13,6 +13,8 @@ export function Login() {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const { authenticateUser } = useContext(
     AuthContext,
   ) as AuthContextType;
@@ -22,8 +24,14 @@ export function Login() {
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    setIsLoading(true)
+
     authenticateUser({ email,password }).then(isUserAuthenticated => {
-      isUserAuthenticated ? navigate("/") : console.log("Credenciais incorretas")
+      isUserAuthenticated ? navigate("/") : setErrorMessage("Credenciais incorretas")
+
+      setIsLoading(false)
+
+      setTimeout(() => formReset(), 3000)
     })
   };
 
@@ -43,6 +51,12 @@ export function Login() {
 
     setIsModalOpen(false);
   };
+
+  const formReset = () => {
+    setEmail("")
+    setPassword("")
+    setErrorMessage("")
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-[#45B649] to-[#DCE35B] p-4 flex items-center justify-center">
@@ -84,9 +98,13 @@ export function Login() {
                 required
               />
             </div>
+            <p className="block h-6 text-red-400 text-sm">
+              {errorMessage}
+            </p>
             <button
               type="submit"
-              className="bg-[#274F32] text-white py-2 rounded-full text-sm font-medium hover:bg-[#1F492A] transition"
+              disabled={isLoading}
+              className="bg-[#274F32] text-white py-2 rounded-full text-sm font-medium enabled:hover:bg-[#1F492A] transition disabled:opacity-50"
             >
               Entrar
             </button>
