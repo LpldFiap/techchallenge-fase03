@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'tailwindcss/tailwind.css';
 import { AuthContext } from '../../context/auth';
@@ -21,10 +21,36 @@ const mockPosts: Post[] = [
 export function Home() {
   const [role, setRole] = useState<UserRole>('teacher');
   const [posts, setPosts] = useState<Post[]>(mockPosts);
-  const { authenticatedUser } = useContext(
-    AuthContext,
-  ) as AuthContextType
+  const [searchQuery, setSearchQuery] = useState<string>(''); // For tracking the input value
+  const { authenticatedUser } = useContext(AuthContext) as AuthContextType;
   const navigate = useNavigate();
+
+  const fetchPosts = async (query: string) => {
+    try {
+      const response = await fetch(`/api/posts?search=${query}`);
+      const data = await response.json();
+      setPosts(data); 
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+  };
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      
+      if (searchQuery) {
+        fetchPosts(searchQuery);
+      } else {
+        setPosts(mockPosts);
+      }
+    }, 500); 
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
+
+  const handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
 
   const handlePostClick = (id: number) => {
     navigate(`/post/${id}`);
@@ -38,22 +64,18 @@ export function Home() {
 
         <h1 className="text-xl font-bold">Publicações</h1>
         <div className="relative mt-6 w-full">
-          <img
-            src="/assets/icons/search.svg"
-            alt="Search Icon"
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5"
-          />
           <input
-            className="rounded-md p-2 pl-10 w-full"
+            className="rounded-md px-4 py-2 w-full"
             placeholder="Buscar publicação"
+            onChange={handleSearchInput}
+            value={searchQuery}
           />
         </div>
-          {role === 'teacher' && (
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md w-full mt-6 flex items-center">
-              Nova publicação
-              <img src="/assets/icons/plus.svg" alt="Plus Icon" className="ml-2 w-4 h-4" />
-            </button>
-          )}
+        {role === 'teacher' && (
+          <button className="bg-[#274F32] text-white px-4 py-2 rounded-md w-full mt-6 flex items-center hover:bg-[#1F492A] transition">
+            Nova publicação
+          </button>
+        )}
       </nav>
       <div>
         {posts.map(post => (
