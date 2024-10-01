@@ -1,38 +1,38 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useContext, useEffect, useState } from 'react';
 import 'tailwindcss/tailwind.css';
+import { AuthContextType, User } from '../../types/user';
+import { AuthContext } from '../../context/auth';
+import { findUserById } from '../../services/findUserById';
+import { Trash } from '@phosphor-icons/react';
 
 type UserRole = 'teacher' | 'student';
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: UserRole;
-}
-
-const mockUsers: User[] = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'student' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'teacher' },
-];
-
 export function Admin() {
-  const [role, setRole] = useState<UserRole>('teacher'); // Simulação de autenticação
-  const [users, setUsers] = useState<User[]>(mockUsers);
+  const [users, setUsers] = useState<User[]>([]);
+  const { authenticatedUser } = useContext(AuthContext) as AuthContextType;
 
-  if (role !== 'teacher') {
+  useEffect(() => {
+    axios.get("http://localhost:3000/user").then((response) => setUsers(response.data))
+  }, [])
+
+  if (authenticatedUser?.role !== 'teacher') {
     return <h1 className="text-center text-red-500">Acesso negado. Apenas professores podem acessar esta página.</h1>;
   }
 
-  const changeUserRole = (id: number, newRole: UserRole) => {
-    setUsers(users.map(user => (user.id === id ? { ...user, role: newRole } : user)));
+  const changeUserRole = async (id: string, newRole: UserRole) => {
+    axios.patch(`http://localhost:3000/user/${id}`, {
+      role: newRole,
+    })
   };
 
-  const deleteUser = (id: number) => {
+  const deleteUser = (id: string) => {
+    axios.delete(`http://localhost:3000/user/${id}`)
     setUsers(users.filter(user => user.id !== id));
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div>
       <h1 className="text-2xl font-bold mb-4 text-center">Administração de Usuários</h1>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white shadow-md rounded">
@@ -53,14 +53,14 @@ export function Admin() {
                 <td className="py-2 px-4 border-b">
                   <button
                     onClick={() => changeUserRole(user.id, 'teacher')}
-                    className={`bg-blue-500 text-white px-2 py-1 rounded mr-2 ${user.role === 'teacher' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`bg-blue-500 text-white px-2 py-1 rounded mr-2 ${user.role === 'teacher' ? 'opacity-30 cursor-not-allowed' : ''}`}
                     disabled={user.role === 'teacher'}
                   >
                     Tornar Professor
                   </button>
                   <button
                     onClick={() => changeUserRole(user.id, 'student')}
-                    className={`bg-green-500 text-white px-2 py-1 rounded mr-2 ${user.role === 'student' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`bg-green-500 text-white px-2 py-1 rounded mr-2 ${user.role === 'student' ? 'opacity-30 cursor-not-allowed' : ''}`}
                     disabled={user.role === 'student'}
                   >
                     Tornar Aluno
@@ -69,7 +69,7 @@ export function Admin() {
                     onClick={() => deleteUser(user.id)}
                     className="bg-red-500 text-white px-2 py-1 rounded"
                   >
-                    Deletar
+                    <Trash color='#FFF' size={18} />
                   </button>
                 </td>
               </tr>

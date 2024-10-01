@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import 'tailwindcss/tailwind.css';
+import { AuthContext } from '../../context/auth';
+import { AuthContextType } from '../../types/user';
 
 interface Post {
   title: string;
@@ -11,10 +13,11 @@ interface Post {
 }
 
 export function PostDetail() {
+  const { authenticatedUser } = useContext(AuthContext) as AuthContextType;
   const { id } = useParams<{ id: string }>();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
-  const [role, setRole] = useState<string>('teacher'); // Simulação de autenticação
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -72,14 +75,14 @@ export function PostDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
+    <div className="flex items-center justify-center">
       <div className="bg-white shadow-md p-6 rounded w-full max-w-2xl">
         <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
         <p className="text-gray-700 mb-4">{post.description}</p>
         <p className="text-gray-500 mb-2">Autor: {post.author}</p>
         <p className="text-gray-500 mb-2">Data de Criação: {new Date(post.createdAt).toLocaleDateString()}</p>
         <p className="text-gray-500">Última Modificação: {new Date(post.updatedAt).toLocaleDateString()}</p>
-        {role === 'teacher' && (
+        {authenticatedUser?.role === 'teacher' && (
           <div className="mt-4 flex justify-end">
             <button
               onClick={handleEdit}

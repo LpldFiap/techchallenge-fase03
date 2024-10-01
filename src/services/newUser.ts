@@ -1,17 +1,17 @@
 import axios from "axios"
 import { User } from "../types/user"
 
-async function newUser({ email, name, password, roles = [] }: User) {
+async function newUser({ email, name, password, role = "teacher" }: Omit<User, "id">) {
   if (!email || !name || !password) {
     console.error("Email inválido")
     return undefined
   }
 
-  const response = await axios.post("http://localhost:3000/users", {
+  const response = await axios.post("http://localhost:3000/user", {
     name,
     email,
     password,
-    roles
+    role
   })
 
   return response.data

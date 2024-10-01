@@ -1,9 +1,9 @@
 export interface User {
-  id?: string
+  id: string
   name: string
   email: string
   password: string
-  roles: Array<"admin" | "teacher">
+  role: "admin" | "teacher" | "student"
 }
 
 export type AuthContextType = {
