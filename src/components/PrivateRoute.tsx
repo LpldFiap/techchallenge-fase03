@@ -1,5 +1,7 @@
 import { Navigate } from 'react-router-dom';
-import { checkAuth } from '../utils/auth';
+import { useContext } from 'react';
+import { AuthContext } from '../context/auth';
+import { AuthContextType } from '../types/user';
 
 interface PrivateRouteProps {
   children: JSX.Element;
@@ -7,7 +9,8 @@ interface PrivateRouteProps {
 }
 
 export function PrivateRoute({ children, allowedRoles }: PrivateRouteProps) {
-  const role = checkAuth();
+  const { authenticatedUser } = useContext(AuthContext) as AuthContextType;
+  const role = authenticatedUser?.role
 
   if (!role) {
     return <Navigate to="/login" />;

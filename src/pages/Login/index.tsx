@@ -46,7 +46,7 @@ export function Login() {
       email: registerEmail,
       name: name,
       password: registerPassword,
-      roles: ["teacher"],
+      role: "teacher",
     });
 
     setIsModalOpen(false);

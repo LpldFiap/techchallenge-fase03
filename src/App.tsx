@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
-import { Header } from "./components/Header";
 import { NewPost } from "./pages/NewPost";
 import { Admin } from "./pages/Admin";
 import { UserProfile } from "./pages/Config";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { PostDetail } from "./pages/Post";
 import AuthUserProvider from "./context/auth";
+import MainLayout from "./Layouts/Main";
 
 function App() {
   return (
@@ -19,10 +19,9 @@ function App() {
             path="/"
             element={
               <PrivateRoute allowedRoles={["teacher", "student"]}>
-                <>
-                  <Header />
+                <MainLayout activeRoute="/">
                   <Home />
-                </>
+                </MainLayout>
               </PrivateRoute>
             }
           />
@@ -30,10 +29,9 @@ function App() {
             path="/post/:id"
             element={
               <PrivateRoute allowedRoles={["teacher", "student"]}>
-                <>
-                  <Header />
+                <MainLayout activeRoute="/post">
                   <PostDetail />
-                </>
+                </MainLayout>
               </PrivateRoute>
             }
           />
@@ -41,10 +39,9 @@ function App() {
             path="/new/:id?"
             element={
               <PrivateRoute allowedRoles={["teacher"]}>
-                <>
-                  <Header />
+                <MainLayout activeRoute="/new">
                   <NewPost />
-                </>
+                </MainLayout>
               </PrivateRoute>
             }
           />
@@ -52,10 +49,9 @@ function App() {
             path="/admin"
             element={
               <PrivateRoute allowedRoles={["teacher"]}>
-                <>
-                  <Header />
+                <MainLayout activeRoute="/admin">
                   <Admin />
-                </>
+                </MainLayout>
               </PrivateRoute>
             }
           />
@@ -63,10 +59,9 @@ function App() {
             path="/config"
             element={
               <PrivateRoute allowedRoles={["teacher", "student"]}>
-                <>
-                  <Header />
+                <MainLayout activeRoute="/config">
                   <UserProfile />
-                </>
+                </MainLayout>
               </PrivateRoute>
             }
           />

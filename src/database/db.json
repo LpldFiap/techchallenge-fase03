@@ -21,23 +21,18 @@
   ],
   "user": [
     {
-      "id": "7816238",
-      "name": "Gabriel",
-      "email": "gbr.antunes@gmail.com",
-      "password": "senha",
-      "roles": [
-        "admin",
-        "teacher"
-      ]
-    },
-    {
-      "id": "87c2",
+      "id": "3e98",
       "name": "Professor",
       "email": "pro@fessor.com",
       "password": "senha",
-      "roles": [
-        "teacher"
-      ]
+      "role": "teacher"
+    },
+    {
+      "id": "bf9f",
+      "name": "Gabriel",
+      "email": "gbr.antunes@gmail.com",
+      "password": "senha",
+      "role": "student"
     }
   ]
 }

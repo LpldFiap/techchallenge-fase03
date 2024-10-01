@@ -53,7 +53,7 @@ export function NewPost() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
+    <div className="flex items-center justify-center">
       <div className="bg-white shadow-md p-6 rounded w-full max-w-md">
         <h1 className="text-2xl font-bold mb-4">{id ? 'Editar Post' : 'Criar Novo Post'}</h1>
         <form onSubmit={handleSubmit}>
