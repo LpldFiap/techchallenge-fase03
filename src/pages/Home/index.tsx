@@ -4,8 +4,6 @@ import 'tailwindcss/tailwind.css';
 import { AuthContext } from '../../context/auth';
 import { AuthContextType } from '../../types/user';
 
-type UserRole = 'teacher' | 'student';
-
 interface Post {
   id: number;
   title: string;
@@ -13,15 +11,9 @@ interface Post {
   author: string;
 }
 
-const mockPosts: Post[] = [
-  { id: 1, title: 'Welcome', content: 'Welcome to the school portal!', author: 'Teacher A' },
-  { id: 2, title: 'Homework', content: 'Please complete your homework by Friday.', author: 'Teacher B' },
-];
-
 export function Home() {
-  const [role, setRole] = useState<UserRole>('teacher');
-  const [posts, setPosts] = useState<Post[]>(mockPosts);
-  const [searchQuery, setSearchQuery] = useState<string>(''); // For tracking the input value
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>(''); 
   const { authenticatedUser } = useContext(AuthContext) as AuthContextType;
   const navigate = useNavigate();
 
@@ -36,13 +28,9 @@ export function Home() {
   };
 
   useEffect(() => {
+
     const delayDebounceFn = setTimeout(() => {
-      
-      if (searchQuery) {
-        fetchPosts(searchQuery);
-      } else {
-        setPosts(mockPosts);
-      }
+      fetchPosts(searchQuery);
     }, 500); 
 
     return () => clearTimeout(delayDebounceFn);
@@ -89,12 +77,12 @@ export function Home() {
             value={searchQuery}
           />
         </div>
-        {role === 'teacher' && (
+        {authenticatedUser?.roles?.includes('teacher') && (
           <Link to="/new/" className="block">
-          <button className="bg-[#274F32] text-white px-4 py-2 rounded-md w-full mt-6 hover:bg-[#1F492A] transition">
-            Nova publicação
-          </button>
-        </Link>
+            <button className="bg-[#274F32] text-white px-4 py-2 rounded-md w-full mt-6 hover:bg-[#1F492A] transition">
+              Nova publicação
+            </button>
+          </Link>
         )}
       </nav>
       <div>
@@ -104,23 +92,22 @@ export function Home() {
             className="bg-white shadow-md mb-4 p-4 border-b border-gray-200 cursor-pointer rounded-md"
             onClick={() => handlePostClick(post.id)}
           >
-            <div className='flex'>
-
+            <div className="flex">
               <h3 className="text-xl font-semibold mb-4">{post.title}</h3>
-              {role === 'teacher' && (
-                <Link to={`/new/${post.id}`} className="block ml-6">
-                  <button className="bg-[#274F32] h-8 text-xs text-white px-2 py-2 rounded-md items-center hover:bg-[#1F492A] transition">
-                    Editar
-                  </button>
-                </Link>
-              )}
-              {role === 'teacher' && (
-                  <button 
+              {authenticatedUser?.roles?.includes('teacher') && (
+                <>
+                  <Link to={`/new/${post.id}`} className="block ml-6">
+                    <button className="bg-[#274F32] h-8 text-xs text-white px-2 py-2 rounded-md items-center hover:bg-[#1F492A] transition">
+                      Editar
+                    </button>
+                  </Link>
+                  <button
                     className="bg-[#E76565] h-8 ml-2 text-xs text-white px-2 py-2 rounded-md items-center hover:bg-[#eb8181] transition"
-                    onClick={() => handleDeletePost(post.id)}   
+                    onClick={() => handleDeletePost(post.id)}
                   >
                     Remover
                   </button>
+                </>
               )}
             </div>
             <p className="text-gray-700">{post.content}</p>
