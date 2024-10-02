@@ -4,7 +4,7 @@ import { useUsers } from '../../context/Users/UsersContext';
 import { TUserRole } from '../../types/user';
 import { deleteUser, getUserId, getUserRole, updateUser } from '../../services/user.service';
 
-export function Admin() {
+export default function Admin() {
   const [role, setRole] = useState<TUserRole | null>(null);
   const { users, loading, fetchUsers } = useUsers();  
   

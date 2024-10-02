@@ -20,7 +20,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   const { data: postsData } = usePosts();
-
+  
   useEffect(() => {
     if (postsData) {
       setPosts(postsData);
@@ -46,7 +46,6 @@ export default function Home() {
       },
     }
   );
-
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <nav className="p-4 mb-4">

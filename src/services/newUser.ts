@@ -1,4 +1,3 @@
-import axios from "axios"
 import { User } from "../types/user"
 import api from "../api"
 
@@ -8,7 +7,7 @@ export const newUser = async ({ email, name, password, roles = [] }: User) => {
     return undefined
   }
 
-  const response = await axios.post(`${api}users`, {
+  const response = await api.post(`users`, {
     name,
     email,
     password,

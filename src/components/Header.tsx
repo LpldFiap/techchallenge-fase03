@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
-import { checkAuth } from "../utils/auth";
+import { useContext } from "react";
+import { AuthContext } from "../context/auth";
+import { AuthContextType } from "../types/user";
 
 export function Header() {
-  const role = checkAuth()
+  const { authenticatedUser } = useContext(AuthContext) as AuthContextType;
+  const role = authenticatedUser?.role
+  console.log(authenticatedUser)
   return (
 
     <ul className="flex justify-center gap-4 text-lg py-6">

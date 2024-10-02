@@ -1,9 +1,9 @@
 export type User = {
-  id?: string
   name: string
   email: string
   password: string
-  roles: Array<"admin" | "teacher">
+  role: "student" | "teacher" | "admin"
+  _id?: string
 }
 
 export type AuthContextType = {
