@@ -1,9 +1,10 @@
 import axios from "axios"
 import { User } from "../types/user"
+import api from "../api";
 
 export function findUserByEmail(email: string): Promise<User | undefined> {
   return axios
-    .get(`http://localhost:3000/user?email=${email}`)
+    .get(`${api}user?email=${email}`)
     .then(response => {
       return response.data[0] as User
     })

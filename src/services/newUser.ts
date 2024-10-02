@@ -1,5 +1,6 @@
 import axios from "axios"
 import { User } from "../types/user"
+import api from "../api"
 
 async function newUser({ email, name, password, roles = [] }: User) {
   if (!email || !name || !password) {
@@ -7,7 +8,7 @@ async function newUser({ email, name, password, roles = [] }: User) {
     return undefined
   }
 
-  const response = await axios.post("http://localhost:3000/users", {
+  const response = await axios.post(`${api}users`, {
     name,
     email,
     password,
