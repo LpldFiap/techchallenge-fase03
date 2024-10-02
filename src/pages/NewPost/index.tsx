@@ -8,7 +8,7 @@ interface Post {
   author: string;
 }
 
-export function NewPost() {
+export default function NewPost() {
   const { id } = useParams<{ id: string }>();
   const [post, setPost] = useState<Post>({ title: '', description: '', author: '' });
   const navigate = useNavigate();

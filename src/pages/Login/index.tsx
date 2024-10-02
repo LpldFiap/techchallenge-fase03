@@ -5,7 +5,7 @@ import { newUser } from "../../services/newUser";
 import { AuthContext } from "../../context/auth";
 import { AuthContextType } from "../../types/user";
 
-export function Login() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);

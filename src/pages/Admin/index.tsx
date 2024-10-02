@@ -15,7 +15,7 @@ const mockUsers: User[] = [
   { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'teacher' },
 ];
 
-export function Admin() {
+export default function Admin() {
   const [role, setRole] = useState<UserRole>('teacher'); // Simulação de autenticação
   const [users, setUsers] = useState<User[]>(mockUsers);
 

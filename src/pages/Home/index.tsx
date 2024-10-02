@@ -3,6 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import 'tailwindcss/tailwind.css';
 import { AuthContext } from '../../context/auth';
 import { AuthContextType } from '../../types/user';
+import usePosts from '../../hooks/usePosts';
+import { useMutation } from 'react-query';
+import deletePost from '../../services/deletePost';
 
 interface Post {
   id: number;
@@ -11,56 +14,38 @@ interface Post {
   author: string;
 }
 
-export function Home() {
+export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [searchQuery, setSearchQuery] = useState<string>(''); 
   const { authenticatedUser } = useContext(AuthContext) as AuthContextType;
   const navigate = useNavigate();
 
-  const fetchPosts = async (query: string) => {
-    try {
-      const response = await fetch(`/api/posts?search=${query}`);
-      const data = await response.json();
-      setPosts(data); 
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-    }
-  };
+  const { data: postsData } = usePosts();
 
   useEffect(() => {
-
-    const delayDebounceFn = setTimeout(() => {
-      fetchPosts(searchQuery);
-    }, 500); 
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchQuery]);
-
-  const handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-  };
+    if (postsData) {
+      setPosts(postsData);
+    }
+  }, [postsData]);
 
   const handlePostClick = (id: number) => {
     navigate(`/post/${id}`);
   };
 
-  const deletePost = async (postId: number) => {
-    try {
-      await fetch(`/api/posts/${postId}`, {
-        method: 'DELETE',
-      });
-      
-      setPosts(prevPosts => prevPosts.filter(post => post.id !== postId));
-    } catch (error) {
-      console.error('Error deleting post:', error);
+  const deleteMutation = useMutation(
+    (postId: string) => {
+      deletePost(postId);
+      console.log(`Removendo post pelo ID: ${postId}`);
+      return Promise.resolve();
+    },
+    {
+      onSuccess: () => {
+        console.log("Post removido com sucesso");
+      },
+      onError: (error: Error) => {
+        console.error("Erro ao deletar ´pst:", error);
+      },
     }
-  };
-
-  const handleDeletePost = (id: number) => {
-    if (window.confirm('Deseja realmente excluir a publicação?')) {
-      deletePost(id);
-    }
-  };
+  );
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
@@ -69,14 +54,6 @@ export function Home() {
         <div className="h-[1px] block w-full bg-slate-200 my-7" />
 
         <h1 className="text-xl font-bold">Publicações</h1>
-        <div className="mt-6 w-full">
-          <input
-            className="rounded-md px-4 py-2 w-full"
-            placeholder="Buscar publicação"
-            onChange={handleSearchInput}
-            value={searchQuery}
-          />
-        </div>
         {authenticatedUser?.roles?.includes('teacher') && (
           <Link to="/new/" className="block">
             <button className="bg-[#274F32] text-white px-4 py-2 rounded-md w-full mt-6 hover:bg-[#1F492A] transition">
@@ -103,7 +80,11 @@ export function Home() {
                   </Link>
                   <button
                     className="bg-[#E76565] h-8 ml-2 text-xs text-white px-2 py-2 rounded-md items-center hover:bg-[#eb8181] transition"
-                    onClick={() => handleDeletePost(post.id)}
+                    onClick={() => {
+                      if (window.confirm("Confirmar exclusão?")) {
+                        deleteMutation.mutate(post?.id.toString());
+                      }
+                    }}
                   >
                     Remover
                   </button>

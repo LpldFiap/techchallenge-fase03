@@ -10,7 +10,7 @@ interface Post {
   updatedAt: string;
 }
 
-export function PostDetail() {
+export default function PostDetail() {
   const { id } = useParams<{ id: string }>();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);

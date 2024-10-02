@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import 'tailwindcss/tailwind.css';
 
-export function UserProfile() {
+export default function UserProfile() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');

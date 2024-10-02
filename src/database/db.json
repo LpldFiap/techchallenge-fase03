@@ -1,12 +1,6 @@
 {
   "post": [
     {
-      "id": "123",
-      "title": "Escreva menos código com o Copilot",
-      "content": "Você já imaginou como seria desenvolver projetos de forma mais ágil e eficiente? Com o GitHub Copilot, isso é possível! Essa ferramenta utiliza inteligência artificial para sugerir trechos de código enquanto você digita, permitindo que você escreva menos e produza mais. Ao automatizar tarefas repetitivas e oferecer sugestões contextualizadas, o Copilot não só acelera o processo de codificação, mas também ajuda a evitar erros comuns. Isso significa mais tempo para se concentrar na lógica e na criatividade do seu projeto. Experimente integrar o Copilot ao seu fluxo de trabalho e descubra como ele pode transformar sua maneira de programar! Menos código, mais eficiência! 🚀",
-      "createdAt": "25/09/2024"
-    },
-    {
       "id": "124",
       "title": "A Importância de Testes Automatizados",
       "content": "Você sabia que a prática de testes automatizados pode salvar seu projeto de muitos problemas? Ao garantir que cada parte do seu código funcione como esperado, você reduz a quantidade de bugs e aumenta a confiabilidade do seu software. Além disso, testes bem implementados facilitam a manutenção e permitem que você faça alterações com mais segurança. Invista tempo na criação de testes e veja como sua qualidade de código melhora! 🔍",
