@@ -40,11 +40,13 @@ export default function AppRouter() {
               />
               <Route
                 path="/post/:id"
-                element={
+                    element={
+                  <PrivateRoute allowedRoles={['teacher', 'student']}>
                     <>
                       <Header />
                       <PostDetail />
                     </>
+                  </PrivateRoute>
                 }
               />
               <Route
@@ -73,11 +75,13 @@ export default function AppRouter() {
               />
               <Route
                 path="/config"
-                element={
+                    element={
+                  <PrivateRoute allowedRoles={['teacher', 'student']}>
                     <>
                       <Header />
                       <UserProfile />
                     </>
+                  </PrivateRoute>
                 }
               />
             </Routes>
