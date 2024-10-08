@@ -28,7 +28,7 @@ export default function AppRouter() {
                 path="/"
                   element={
                     <>
-                      <PrivateRoute allowedRoles={['teacher']}>
+                      <PrivateRoute allowedRoles={['teacher', 'student']}>
                         <>
                           <Header />
                           <Home />
@@ -40,41 +40,48 @@ export default function AppRouter() {
               />
               <Route
                 path="/post/:id"
-                element={
+                    element={
+                  <PrivateRoute allowedRoles={['teacher', 'student']}>
                     <>
                       <Header />
                       <PostDetail />
                     </>
+                  </PrivateRoute>
                 }
               />
               <Route
                 path="/new/:id?"
-                element={
+                    element={
+                  <PrivateRoute allowedRoles={['teacher']}>
                   <>
                     <PostsProvider>
-
                       <Header />
                       <NewPost />
                     </PostsProvider>
-                    </>
+                  </>
+                  </PrivateRoute>
                 }
               />
               <Route
                 path="/admin"
-                element={
+                    element={
+                  <PrivateRoute allowedRoles={['teacher']} >
                     <>
                       <Header />
                       <Admin />
                     </>
+                  </PrivateRoute>
                 }
               />
               <Route
                 path="/config"
-                element={
+                    element={
+                  <PrivateRoute allowedRoles={['teacher', 'student']}>
                     <>
                       <Header />
                       <UserProfile />
                     </>
+                  </PrivateRoute>
                 }
               />
             </Routes>

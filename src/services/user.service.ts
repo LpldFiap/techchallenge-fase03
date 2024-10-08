@@ -53,8 +53,8 @@ export const createUser = async (user: TUser): Promise<TUser> => {
     return response as TUser;
 }
 
-export const updateUser = async ({ id, userData }:{id: string, userData: TUser}): Promise<TUser> => {
-    const response = await httpRequest(`${BASE_API}users/${id}`, { method: 'PUT', body: userData });
+export const updateUser = async ({ id, userData }: { id: string, userData: TUser }): Promise<TUser> => {
+    const response = await httpRequest(`${BASE_API}users/${id}`, { method: 'PUT', body: {...userData, user_id: id} });
     return response as TUser;
 }
 
