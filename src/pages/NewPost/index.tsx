@@ -4,6 +4,7 @@ import 'tailwindcss/tailwind.css';
 import { createPost, updatePost } from '../../services/post.services';
 import { getUserId, getUserName } from '../../services/user.service';
 import { usePosts } from '../../context/Posts/PostsContext';
+import LoadingComponent from '../../components/LoadingComponent';
 
 interface Post {
   title: string;
@@ -68,7 +69,7 @@ export default function NewPost() {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">Carregando...</div>;
+    return <LoadingComponent />;
   }
 
   return (

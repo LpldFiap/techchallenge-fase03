@@ -1,12 +1,8 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../context/auth";
-import { AuthContextType } from "../types/user";
+import { getUserRole } from "../services/user.service";
 
 export function Header() {
-  const { authenticatedUser } = useContext(AuthContext) as AuthContextType;
-  const role = authenticatedUser?.role
-  console.log(authenticatedUser)
+  const role = getUserRole()
   return (
 
     <ul className="flex justify-center gap-4 text-lg py-6">
@@ -16,9 +12,6 @@ export function Header() {
       <li className="hover:opacity-50 transition-opacity">
         <Link to="/">Posts</Link>
       </li>
-      {/* <li className="hover:opacity-50 transition-opacity">
-        <Link to="/login">Login</Link>
-      </li> */}
       {role && role === 'teacher' && (
         <>
       <li className="hover:opacity-50 transition-opacity">

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useUsers } from '../../context/Users/UsersContext';
 import { TUserRole } from '../../types/user';
 import { deleteUser, getUserId, getUserRole, updateUser } from '../../services/user.service';
+import LoadingComponent from '../../components/LoadingComponent';
 
 export default function Admin() {
   const [role, setRole] = useState<TUserRole | null>(null);
@@ -50,7 +51,7 @@ export default function Admin() {
     return <h1 className="text-center text-red-500">Acesso negado. Apenas professores podem acessar esta página.</h1>;
   }
   if (loading) {
-    return <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">Carregando...</div>;
+    return <LoadingComponent />;
   }
 
   return (

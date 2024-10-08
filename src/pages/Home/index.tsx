@@ -1,11 +1,10 @@
-import { useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import 'tailwindcss/tailwind.css';
-import { AuthContext } from '../../context/auth';
-import { AuthContextType } from '../../types/user';
 import usePosts from '../../hooks/usePosts';
-import { useMutation } from 'react-query';
-import deletePost from '../../services/deletePost';
+import LoadingComponent from '../../components/LoadingComponent';
+import { getUser, getUserId, getUserName } from '../../services/user.service';
+import { deletePost } from '../../services/post.services';
 
 interface Post {
   _id: number;
@@ -15,45 +14,51 @@ interface Post {
 }
 
 export default function Home() {
+  const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
-  const { authenticatedUser } = useContext(AuthContext) as AuthContextType;
+  const user = getUser()
   const navigate = useNavigate();
 
-  const { data: postsData } = usePosts();
+  const { data: postsData } = usePosts() as unknown as {data:Post[]};
   
   useEffect(() => {
+    setLoading(true);
     if (postsData) {
       setPosts(postsData);
     }
+    setLoading(false);
   }, [postsData]);
 
-  const handlePostClick = (id: number) => {
+  const handlePostClick = ({id}:{id: string | number}) => {
     navigate(`/post/${id}`);
   };
 
-  const deleteMutation = useMutation(
-    (postId: string) => {
-      deletePost(postId);
-      console.log(`Removendo post pelo ID: ${postId}`);
-      return Promise.resolve();
-    },
-    {
-      onSuccess: () => {
-        console.log("Post removido com sucesso");
-      },
-      onError: (error: Error) => {
-        console.error("Erro ao deletar ´pst:", error);
-      },
+  const handleDelete = async (id: string) => {
+    try {
+      if (!id) return
+      setLoading(true);
+      const user_id = getUserId();
+      await deletePost({id, user_id});
+    } catch (error) {
+      console.error('Erro ao deletar o post:', error);
+    } finally {
+      setLoading(false);
+      navigate('/');
     }
-  );
+  };
+
+  if (loading) {
+    return <LoadingComponent />
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <nav className="p-4 mb-4">
-        <strong className="text-4xl">Bom te ver {authenticatedUser?.name}!</strong>
+        <strong className="text-4xl">Bom te ver {user?.name}!</strong>
         <div className="h-[1px] block w-full bg-slate-200 my-7" />
 
         <h1 className="text-xl font-bold">Publicações</h1>
-        {authenticatedUser?.roles?.includes('teacher') && (
+        {user?.role === 'teacher' && (
           <Link to="/new/" className="block">
             <button className="bg-[#274F32] text-white px-4 py-2 rounded-md w-full mt-6 hover:bg-[#1F492A] transition">
               Nova publicação
@@ -65,23 +70,25 @@ export default function Home() {
         {posts.map(post => (
           <div
             key={post._id}
-            className="bg-white shadow-md mb-4 p-4 border-b border-gray-200 cursor-pointer rounded-md"
-            onClick={() => handlePostClick({id: post._id || ''})}
+            className="bg-white shadow-md mb-4 p-4 border-b border-gray-200 rounded-md z-50"
+            
           >
-            <div className="flex">
-              <h3 className="text-xl font-semibold mb-4">{post.title}</h3>
-              {authenticatedUser?.roles?.includes('teacher') && (
+            <div className="flex z-50">
+              <div className='cursor-pointer' onClick={() => handlePostClick({id: post._id || ''})}>
+                <h3 className="text-xl font-semibold mb-4">{post.title}</h3>
+              </div>
+              {user?.role === 'teacher' && (
                 <>
-                  <Link to={`/new/${post._id}`} className="block ml-6">
-                    <button className="bg-[#274F32] h-8 text-xs text-white px-2 py-2 rounded-md items-center hover:bg-[#1F492A] transition">
+                  <Link to={`/new/${post._id}`} className="block ml-6 z-50">
+                    <button className="bg-[#274F32] h-8 text-xs text-white px-2 py-2 rounded-md items-center hover:bg-[#1F492A] transition z-50">
                       Editar
                     </button>
                   </Link>
                   <button
-                    className="bg-[#E76565] h-8 ml-2 text-xs text-white px-2 py-2 rounded-md items-center hover:bg-[#eb8181] transition"
+                    className="bg-[#E76565] h-8 ml-2 text-xs text-white px-2 py-2 rounded-md items-center hover:bg-[#eb8181] transition z-50"
                     onClick={() => {
                       if (window.confirm("Confirmar exclusão?")) {
-                        deleteMutation.mutate(post?._id.toString());
+                        handleDelete(post?._id.toString());
                       }
                     }}
                   >
@@ -90,8 +97,10 @@ export default function Home() {
                 </>
               )}
             </div>
-            <p className="text-gray-700">{post.content}</p>
-            <p className="text-gray-500 text-sm">Autor: {post.author}</p>
+            <div>
+              <p className="text-gray-700">{post.content}</p>
+              <p className="text-gray-500 text-sm">Autor: {post.author}</p>
+            </div>
           </div>
         ))}
       </div>

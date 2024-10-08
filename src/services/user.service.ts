@@ -21,6 +21,14 @@ export const getUserName = (): string | null => {
   return null;
 }
 
+export const getUser = () => {
+  const user = localStorage.getItem('user');
+  if (user) {
+    return JSON.parse(user);
+  }
+  return null;
+}
+
 export const getUserId = (): string => {
   const user = localStorage.getItem('user');
   if (user) {

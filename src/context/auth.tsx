@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
-import { AuthContextType, User } from '../types/user'
+import React from 'react';
+import { AuthContextType, TUserRole, User } from '../types/user'
 import { findUserByEmail } from '../services/findUserByEmail';
+import { saveUser } from '../utils/auth';
 
 export const AuthContext = React.createContext<AuthContextType | null>(null);
 
@@ -12,6 +13,13 @@ function AuthUserProvider({ children }: { children: React.ReactNode }) {
 
     if (foundUser) {
       setAuthenticatedUser(foundUser);
+      const user = {
+        name: foundUser.name,
+        email: foundUser.email,
+        role: foundUser.role as TUserRole,
+        _id: foundUser._id
+      }
+      saveUser(user);
       return foundUser;
     } else {
       console.error("Error login: User not found");

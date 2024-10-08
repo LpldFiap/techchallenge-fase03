@@ -6,6 +6,7 @@ import { deletePost } from '../../services/post.services';
 import { getUserId, getUserRole } from '../../services/user.service';
 import { TUserRole } from '../../types/user';
 import { usePosts } from '../../context/Posts/PostsContext';
+import LoadingComponent from '../../components/LoadingComponent';
 
 export default function PostDetail() {
   const { id } = useParams<{ id: string }>();
@@ -60,7 +61,7 @@ export default function PostDetail() {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">Carregando...</div>;
+    return <LoadingComponent />;
   }
 
   if (!post) {
@@ -75,18 +76,19 @@ export default function PostDetail() {
         <p className="text-gray-500 mb-2">Data de Criação: {post.created_at ? new Date(post.created_at).toISOString() : ''}</p>
         {role === 'teacher' && (
           <div className="mt-4 flex justify-end">
+            <button onClick={handleEdit} className="bg-[#274F32] h-8 text-xs text-white px-2 py-2 rounded-md items-center hover:bg-[#1F492A] transition z-50">
+                      Editar
+                    </button>
             <button
-              onClick={handleEdit}
-              className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
-            >
-              Editar
-            </button>
-            <button
-              onClick={handleDelete}
-              className="bg-red-500 text-white px-4 py-2 rounded"
-            >
-              Deletar
-            </button>
+                    className="bg-[#E76565] h-8 ml-2 text-xs text-white px-2 py-2 rounded-md items-center hover:bg-[#eb8181] transition z-50"
+                    onClick={() => {
+                      if (window.confirm("Confirmar exclusão?")) {
+                        handleDelete();
+                      }
+                    }}
+                  >
+                    Remover
+                  </button>
           </div>
         )}
       </div>
