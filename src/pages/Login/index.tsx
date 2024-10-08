@@ -26,8 +26,8 @@ export default function Login() {
 
     setIsLoading(true)
 
-    authenticateUser({ email,password }).then(isUserAuthenticated => {
-      isUserAuthenticated ? navigate("/") : setErrorMessage("Credenciais incorretas")
+    authenticateUser({ email, password }).then(isUserAuthenticated => {
+      isUserAuthenticated?.name ? navigate("/") : setErrorMessage("Credenciais incorretas")
 
       setIsLoading(false)
 

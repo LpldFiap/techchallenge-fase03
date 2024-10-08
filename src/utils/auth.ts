@@ -1,3 +1,5 @@
+import { TUser } from "../types/user";
+
 export function checkAuth() {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   if (user && user.email) {
@@ -6,7 +8,7 @@ export function checkAuth() {
   return null; // Usuário não está logado
 }
 
-export function saveUser(name: string, email: string, role: string) {
-  const user = { name, email, role };
+export function saveUser({ name, email, role, _id }: TUser) {
+  const user = { name, email, role, _id };
   localStorage.setItem('user', JSON.stringify(user));
 }

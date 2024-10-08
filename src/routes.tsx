@@ -4,6 +4,8 @@ import LoadingComponent from "./components/LoadingComponent";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { Header } from "./components/Header";
 import AuthUserProvider from "./context/auth";
+import { PostsProvider } from "./context/Posts/PostsContext";
+import { UsersProvider } from "./context/Users/UsersContext";
 
 const UserProfile = lazy(() => import("./pages/Config"));
 const Admin = lazy(() => import("./pages/Admin"));
@@ -16,68 +18,70 @@ export default function AppRouter() {
   return (
     <main>
       <AuthUserProvider>
-        <Router>
-        <Suspense fallback={<LoadingComponent />}>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route
-              path="/"
-              element={
-                <PrivateRoute allowedRoles={["teacher", "student"]}>
+        <PostsProvider>
+          <UsersProvider>
+          <Router>
+          <Suspense fallback={<LoadingComponent />}>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/"
+                  element={
+                    <>
+                      <PrivateRoute allowedRoles={['teacher']}>
+                        <>
+                          <Header />
+                          <Home />
+                        </>
+                      </PrivateRoute>
+                    </>
+                    
+                }
+              />
+              <Route
+                path="/post/:id"
+                element={
+                    <>
+                      <Header />
+                      <PostDetail />
+                    </>
+                }
+              />
+              <Route
+                path="/new/:id?"
+                element={
                   <>
-                    <Header />
-                    <Home />
-                  </>
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/post/:id"
-              element={
-                <PrivateRoute allowedRoles={["teacher", "student"]}>
-                  <>
-                    <Header />
-                    <PostDetail />
-                  </>
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/new/:id?"
-              element={
-                <PrivateRoute allowedRoles={["teacher"]}>
-                  <>
-                    <Header />
-                    <NewPost />
-                  </>
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                <PrivateRoute allowedRoles={["teacher"]}>
-                  <>
-                    <Header />
-                    <Admin />
-                  </>
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/config"
-              element={
-                <PrivateRoute allowedRoles={["teacher", "student"]}>
-                  <>
-                    <Header />
-                    <UserProfile />
-                  </>
-                </PrivateRoute>
-              }
-            />
-          </Routes>
-          </Suspense>
-        </Router>
+                    <PostsProvider>
+
+                      <Header />
+                      <NewPost />
+                    </PostsProvider>
+                    </>
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                    <>
+                      <Header />
+                      <Admin />
+                    </>
+                }
+              />
+              <Route
+                path="/config"
+                element={
+                    <>
+                      <Header />
+                      <UserProfile />
+                    </>
+                }
+              />
+            </Routes>
+            </Suspense>
+          </Router>
+          </UsersProvider>
+        </PostsProvider>
       </AuthUserProvider>
     </main>
   );
