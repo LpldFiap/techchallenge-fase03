@@ -1,22 +1,40 @@
 import { useState } from 'react';
 import 'tailwindcss/tailwind.css';
+import { getUser, updateUser } from '../../services/user.service';
+import LoadingComponent from '../../components/LoadingComponent';
 
 export default function UserProfile() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [currentPassword, setCurrentPassword] = useState('');
+  const user = getUser();
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!name || !email || !newPassword || !confirmNewPassword) {
+      alert('Preencha todos os campos');
+      return;
+    }
     if (newPassword !== confirmNewPassword) {
       alert('As senhas não coincidem');
       return;
     }
-    // Lógica para atualizar o perfil do usuário
-    console.log('Perfil atualizado:', { name, email, newPassword });
+    setIsLoading(true);
+    try {
+      await updateUser({ id: user._id, userData: { name, email, password: newPassword, role: user.role } });
+      alert('Perfil atualizado com sucesso');
+    }catch(err){
+      console.error('Erro ao atualizar perfil', err);
+    }finally{
+      setIsLoading(false);
+    }
   };
+
+if(isLoading) return <LoadingComponent />
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
@@ -39,16 +57,6 @@ export default function UserProfile() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Senha Atual</label>
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
               className="w-full px-3 py-2 border rounded"
               required
             />

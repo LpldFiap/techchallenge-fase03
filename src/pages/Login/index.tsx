@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { newUser } from "../../services/newUser";
 import { AuthContext } from "../../context/auth";
 import { AuthContextType } from "../../types/user";
+import LoadingComponent from "../../components/LoadingComponent";
+import { findUserByEmail } from "../../services/findUserByEmail";
+import { saveUser } from "../../utils/auth";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -35,21 +38,38 @@ export default function Login() {
     })
   };
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (registerPassword !== confirmPassword) {
       alert("As senhas não coincidem");
       return;
     }
+    setIsLoading(true)
 
-    newUser({
-      email: registerEmail,
-      name: name,
-      password: registerPassword,
-      roles: ["teacher"],
-    });
+    try {
+      
+      const response = await newUser({
+        email: registerEmail,
+        name: name,
+        password: registerPassword,
+        role: 'student',
+      });
+      console.log('response', response);
+      if (!response) {
+        console.log("Erro ao cadastrar usuário");
+        return;
+      }
+      saveUser({name: response.Name, email: response.Email, role: response.Role, _id: '0'});
+      setIsModalOpen(false);
+      navigate("/");
+      formReset()
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false)
+    }
 
-    setIsModalOpen(false);
+
   };
 
   const formReset = () => {
@@ -57,6 +77,8 @@ export default function Login() {
     setPassword("")
     setErrorMessage("")
   }
+
+  if(isLoading) return <LoadingComponent />
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-[#45B649] to-[#DCE35B] p-4 flex items-center justify-center">

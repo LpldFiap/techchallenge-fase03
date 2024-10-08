@@ -1,7 +1,7 @@
 import { User } from "../types/user"
 import api from "../api"
 
-export const newUser = async ({ email, name, password, roles = [] }: User) => {
+export const newUser = async ({ email, name, password, role }: User) => {
   if (!email || !name || !password) {
     console.error("Email inválido")
     return undefined
@@ -11,7 +11,7 @@ export const newUser = async ({ email, name, password, roles = [] }: User) => {
     name,
     email,
     password,
-    roles
+    role
   })
 
   return response.data
