@@ -31,14 +31,16 @@ A interface foi desenvolvida com **Vite** e **React**, utilizando **Tailwind CSS
 
 ### Página Principal (Lista de Posts)
 - Exibir uma lista de todos os posts disponíveis.
-- Cada item da lista deve mostrar o título, autor e uma breve descrição do post.
-- Incluir um campo de busca para filtrar posts por palavras-chave.
+- Exibir uma lista de todas as postagens, com opções para editar e excluir cada post.
 ![Imagem da Página Principal](src/assets/home_admin.png)
 
 ### Página de Leitura de Post
 - Exibir o conteúdo completo de um post selecionado.
-- Permitir comentários nos posts (opcional).
-![Imagem da Página de Leitura de Post](src/assets/visualizar_post_aluno.png)
+![Imagem da Página de Leitura de Post](src/assets/detalhes_post_aluno.png)
+
+### Página de visualização de Posts como aluno
+- Exibir uma lista contendo todos os posts.
+![Imagem da Página de Leitura de Post](src/assets/detalhes_post_aluno.png)
 
 ### Página de Criação de Postagens
 - Formulário para que docentes possam criar postagens.
@@ -53,8 +55,7 @@ A interface foi desenvolvida com **Vite** e **React**, utilizando **Tailwind CSS
 ![Imagem da Página de Edição de Postagens](src/assets/editar_post.png)
 
 ### Página Administrativa
-- Exibir uma lista de todas as postagens, com opções para editar e excluir cada post.
-- Botões para editar e excluir postagens específicas.
+- Permitir que o admin altere o tipo de permissão dos usuários
 ![Imagem da Página Administrativa](src/assets/admin.png)
 
 ### Autenticação e Autorização
@@ -62,18 +63,23 @@ A interface foi desenvolvida com **Vite** e **React**, utilizando **Tailwind CSS
 - Garantir que apenas usuários autenticados possam acessar as páginas de criação, edição e administração de postagens.
 ![Imagem da Autenticação](src/assets/login.png)
 
-[API Fase 2](https://github.com/LpldFiap/StudyTech.git)
+[Repositório API Fase 2](https://github.com/LpldFiap/StudyTech.git)
 
 ## Como Executar o Projeto
 1. Clone o repositório da API:
+
 ```bash
 git clone https://github.com/LpldFiap/StudyTech.git
 ```
-2.Siga as instruções para rodar o backend e garantir que ele esteja ativo.
+2. Siga as instruções para rodar o backend e garantir que ele esteja ativo.
 
-3.Clone este repositório e execute o comando abaixo:
+3. Clone este repositório e execute o comando abaixo:
 
 ```bash
 npm run dev
 ```
 
+## Apresentação
+
+![Vídeo apresentação desse Projeto](src/assets/apresentacao)
+- Caminho > *src/assets/apresentacao.zip*
