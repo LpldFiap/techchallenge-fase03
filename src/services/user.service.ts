@@ -38,6 +38,10 @@ export const getUserId = (): string => {
   return '';
 }
 
+export const logout = () => {
+  localStorage.removeItem('user');
+}
+
 export const getAllUsers = async (): Promise<TUser[]> => {
     const response = await httpRequest(`${BASE_API}users`, { method: 'GET' });
     return response as TUser[] || [];
