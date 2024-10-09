@@ -81,5 +81,5 @@ npm run dev
 
 ## Apresentação
 
-![Vídeo apresentação desse Projeto](src/assets/apresentacao)
+![Vídeo apresentação desse Projeto](src/assets/apresentacao.mp4)
 - Caminho > *src/assets/apresentacao.zip*
