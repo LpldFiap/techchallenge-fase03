@@ -33,34 +33,34 @@ A interface foi desenvolvida com **Vite** e **React**, utilizando **Tailwind CSS
 - Exibir uma lista de todos os posts disponíveis.
 - Cada item da lista deve mostrar o título, autor e uma breve descrição do post.
 - Incluir um campo de busca para filtrar posts por palavras-chave.
-![Imagem da Página Principal](--image1)
+![Imagem da Página Principal](src/assets/home_admin.png)
 
 ### Página de Leitura de Post
 - Exibir o conteúdo completo de um post selecionado.
 - Permitir comentários nos posts (opcional).
-![Imagem da Página de Leitura de Post](--image2)
+![Imagem da Página de Leitura de Post](src/assets/visualizar_post_aluno.png)
 
 ### Página de Criação de Postagens
 - Formulário para que docentes possam criar postagens.
 - Campos para título, conteúdo e autor.
 - Botão para enviar o post ao servidor.
-![Imagem da Página de Criação de Postagens](--image3)
+![Imagem da Página de Criação de Postagens](src/assets/criacao_post.png)
 
 ### Página de Edição de Postagens
 - Formulário para que os(as) professores(as) possam editar postagens existentes.
 - Carregar os dados atuais do post para edição.
 - Botão para salvar as alterações.
-![Imagem da Página de Edição de Postagens](--image4)
+![Imagem da Página de Edição de Postagens](src/assets/editar_post.png)
 
 ### Página Administrativa
 - Exibir uma lista de todas as postagens, com opções para editar e excluir cada post.
 - Botões para editar e excluir postagens específicas.
-![Imagem da Página Administrativa](--image5)
+![Imagem da Página Administrativa](src/assets/admin.png)
 
 ### Autenticação e Autorização
 - Implementar login para professores.
 - Garantir que apenas usuários autenticados possam acessar as páginas de criação, edição e administração de postagens.
-![Imagem da Autenticação](--image6)
+![Imagem da Autenticação](src/assets/login.png)
 
 [API Fase 2](https://github.com/LpldFiap/StudyTech.git)
 
@@ -76,3 +76,4 @@ git clone https://github.com/LpldFiap/StudyTech.git
 ```bash
 npm run dev
 ```
+
